@@ -1,13 +1,25 @@
 import os
+import re
 from pydub import AudioSegment
 
 # Define paths
-source_folder = r"C:\Apache24\htdocs\MortenHe\TipToiPlaylistPlayer\audio-mp3"
-destination_folder = r"C:\Apache24\htdocs\MortenHe\TipToiPlaylistPlayer\audio"
+source_folder = r"audio-mp3"
+destination_folder = r"audio"
+
+# Control whether to limit the wav files to 3 seconds or keep original length
+limit_to_3_seconds = True
 
 # Ensure destination folder exists
 if not os.path.exists(destination_folder):
     os.makedirs(destination_folder)
+
+# Remove existing WAV files that follow the pattern 'XX - Name.wav' from the audio folder
+pattern = re.compile(r"^\d{2} - .+\.wav$")
+existing_wav_files = [f for f in os.listdir(destination_folder) if f.endswith('.wav') and pattern.match(f)]
+for file in existing_wav_files:
+    file_path = os.path.join(destination_folder, file)
+    os.remove(file_path)
+    print(f"Removed: {file}")
 
 # Get all mp3 files in the source folder
 mp3_files = [f for f in os.listdir(source_folder) if f.endswith('.mp3')]
@@ -33,12 +45,15 @@ for index, (song_title, source_path) in enumerate(renamed_files, start=1):
     # Load mp3 file
     audio = AudioSegment.from_mp3(source_path)
     
-    # Shorten the audio to the first 3 seconds
-    short_audio = audio[:3000]  # 3000ms = 3 seconds
+    # If limit_to_3_seconds is True, shorten the audio to the first 3 seconds
+    if limit_to_3_seconds:
+        short_audio = audio[:3000]  # 3000ms = 3 seconds
+    else:
+        short_audio = audio  # Keep original length
     
-    # Export the shortened audio as wav to the destination folder
+    # Export the audio as wav to the destination folder
     short_audio.export(destination_path, format="wav")
 
-    print(f"Converted and moved: {new_file_name} (first 3 seconds)")
+    print(f"Converted and moved: {new_file_name} (limited to 3 seconds: {limit_to_3_seconds})")
 
-print("All files processed and shortened successfully.")
+print("All files processed successfully.")

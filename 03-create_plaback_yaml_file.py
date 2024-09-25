@@ -3,8 +3,8 @@ import re
 import yaml
 
 # Define the path to the audio folder and the output YAML file
-audio_folder = r"C:\Apache24\htdocs\MortenHe\TipToiPlaylistPlayer\audio"  # Update to your actual audio folder
-yaml_output_path = r"C:\Apache24\htdocs\MortenHe\TipToiPlaylistPlayer\Songs.yaml"
+audio_folder = r"audio"  # Update to your actual audio folder
+yaml_output_path = r"Songs.yaml"
 
 # Regular expression to match "XX - songname.wav" pattern
 pattern = re.compile(r"^\d{2} - .+\.wav$")
@@ -18,7 +18,6 @@ wav_files.sort()
 # Initialize the YAML structure
 yaml_content = {
     'product-id': 998,
-    'comment': "Musikplayer von Martin Helfer für Laila Helfer",
     'welcome': 'start',
     'gme-lang': 'GERMAN',
     'media-path': 'Audio/%s',

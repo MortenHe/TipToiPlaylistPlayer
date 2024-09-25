@@ -12,7 +12,7 @@ try:
         print(f"Running command: {' '.join(oid_table_command)}")
         subprocess.run(oid_table_command, check=True)
 
-        oid_table_command = [tttool_path, "--pixel-size", "4", "--code-dim", "30", "oid-table", "oid-table", songs_yaml_file_path]
+        oid_table_command = [tttool_path, "--pixel-size", "4", "--code-dim", "30", "oid-table", songs_yaml_file_path]
         print(f"Running command: {' '.join(oid_table_command)}")
         subprocess.run(oid_table_command, check=True)
 
