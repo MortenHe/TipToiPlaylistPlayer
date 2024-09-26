@@ -47,13 +47,24 @@ for index, (prefix, song) in enumerate(song_titles, start=1):
         "J(check_limit) P(s)"
     ]
 
-# Add play_songs dynamic part for 8 songs
-play_songs_script = []
-for i in range(1, 9):  # Only allow up to 8 songs to be played in a setlist
-    for j in range(1, len(song_titles) + 1):  # Iterate over all matched songs
-        play_songs_script.append(f"$counter=={i}? $pos{i}=={j}? P(\"{song_titles[j-1][0]} - {song_titles[j-1][1]}\") J(next) P(s)")
+# Create dynamic play_1, play_2, ..., play_8 scripts
+for counter in range(1, 9):
+    play_script = []
+    for index, (prefix, song) in enumerate(song_titles, start=1):
+        play_script.append(f"$pos{counter}=={index}? P(\"{prefix} - {song}\") J(next) P(s)")
+    
+    # Add J(reset) P(s) at the end of each play_X script
+    play_script.append("J(reset) P(s)")
+    
+    yaml_content['scripts'][f'play_{counter}'] = play_script
 
-yaml_content['scripts']['play_songs'] = play_songs_script + ["J(reset) P(s)"]
+# Add dynamic play_songs script that calls play_1, play_2, etc.
+play_songs_script = []
+for i in range(1, 9):
+    play_songs_script.append(f"$counter=={i}? J(play_{i}) P(s)")
+play_songs_script.append("J(reset) P(s)")
+
+yaml_content['scripts']['play_songs'] = play_songs_script
 
 # Add the static parts in the 'scripts' block
 yaml_content['scripts'].update({
