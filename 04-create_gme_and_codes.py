@@ -21,7 +21,7 @@ try:
         print(f"Running command: {' '.join(assemble_command)}")
         subprocess.run(assemble_command, check=True)
 
-         # Command to run assemble
+        # Command to run assemble
         assemble_command = [tttool_path, "assemble", songs_yaml_file_path]
         print(f"Running command: {' '.join(assemble_command)}")
         subprocess.run(assemble_command, check=True)
