@@ -3,21 +3,21 @@ import yaml
 import re
 
 # Define the path to the audio folder and the output YAML file
-audio_folder = r"audio"  # Update to your actual folder containing the WAV files
+audio_folder = r"audio"  # Update to your actual folder containing the MP3 files
 yaml_output_path = r"Laila.yaml"
 
-# Regex pattern to match the files with the format 'XX - Name.wav'
-pattern = re.compile(r"^\d{2} - (.+)\.wav$")
+# Regex pattern to match the files with the format 'XX - Name.mp3'
+pattern = re.compile(r"^\d{2} - (.+)\.mp3$")
 
-# Get all wav files in the source folder that match the pattern
-wav_files = [f for f in os.listdir(audio_folder) if pattern.match(f)]
+# Get all mp3 files in the source folder that match the pattern
+mp3_files = [f for f in os.listdir(audio_folder) if pattern.match(f)]
 
 # Function to extract the song title from the file name
 def get_song_title(file_name):
     return pattern.match(file_name).group(1).strip()
 
 # Create a list of song titles with their XX prefix
-song_titles = [(f[:2], get_song_title(f)) for f in wav_files]
+song_titles = [(f[:2], get_song_title(f)) for f in mp3_files]
 
 # Sort the song titles by the two-digit prefix (XX)
 song_titles.sort(key=lambda x: x[0])
@@ -84,7 +84,7 @@ yaml_content['scripts'].update({
         "$counter:=1 J(play_songs) P(s)"
     ],
     'next': [
-        "$counter+=1 J(play_songs) P(s)"
+        "$counter+=1 P(ok) J(play_songs) P(s)"
     ]
 })
 
